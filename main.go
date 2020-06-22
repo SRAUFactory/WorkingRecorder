@@ -1,9 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	fmt.Println("vim-go")
+	var command string
+	fmt.Scanf("%s", &command)
+	switch command {
+	case "start":
+		start()
+	case "stop":
+		stop()
+	case "report":
+		report()
+	default:
+		fmt.Println("No such command!!")
+	}
 }
 
 func start() {
