@@ -26,12 +26,14 @@ func start() {
 
 func stop() {
 	var next int
-	fmt.Println("stop")
-	fmt.Println("Please select future plans!!")
-	fmt.Println("1:Suspend work")
-	fmt.Println("2:Continue to work on other tasks")
-	fmt.Println("3:Finish today's work")
-	fmt.Print("select:")
+	fmt.Print("stop")
+	const explain = `
+Please select future plans!!
+1: Suspend work
+2: Continue to work on other tasks
+3: Finish today's work
+select: `
+	fmt.Print(explain)
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
 	fmt.Println()
