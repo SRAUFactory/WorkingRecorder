@@ -3,10 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
 	"time"
 )
 
-const logFileName = "record.log"
+const logFileName = "./record.log"
 const datetimeFormat = "2006-01-02 15:04:05"
 
 func main() {
@@ -35,6 +37,7 @@ What do you do? : `
 	t := time.Now()
 	fmt.Printf("Start working on '%s' at %s. Good luck!!", work, t.Format(datetimeFormat))
 	fmt.Println()
+	output("start", work, t)
 }
 
 func stop() {
@@ -50,7 +53,7 @@ selectd : `
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
 	fmt.Println()
-	// @ToDo 作業記録保存
+	output("stop", "", time.Now())
 	if next == 2 {
 		start()
 	} else if next == 3 {
@@ -60,4 +63,14 @@ selectd : `
 
 func report() {
 	fmt.Println("report")
+}
+
+func output(prefix string, work string, t time.Time) {
+	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	fmt.Fprintf(f, "%s :: %s :: %s", t.Format(datetimeFormat), prefix, work)
 }
