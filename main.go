@@ -3,7 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"time"
 )
+
+const logFileName = "record.log"
+const datetimeFormat = "2006-01-02 15:04:05"
 
 func main() {
 	flag.Parse()
@@ -21,7 +25,16 @@ func main() {
 }
 
 func start() {
+	var work string
 	fmt.Println("start")
+	const explain = `
+Start your task!!
+What do you do? : `
+	fmt.Print(explain)
+	fmt.Scanf("%s", &work)
+	t := time.Now()
+	fmt.Printf("Start working on '%s' at %s. Good luck!!", work, t.Format(datetimeFormat))
+	fmt.Println()
 }
 
 func stop() {
@@ -32,7 +45,7 @@ Please select future plans!!
 1: Suspend work
 2: Continue to work on other tasks
 3: Finish today's work
-select: `
+selectd : `
 	fmt.Print(explain)
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
