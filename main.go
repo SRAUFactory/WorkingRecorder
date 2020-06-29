@@ -33,12 +33,23 @@ func start() {
 	const explain = `
 Start your task!!
 What do you do? : `
+
+	records, err := read()
+	if err != nil {
+		records = [][]string{}
+	}
+	last := len(records) - 1
+	if last >= 0 && records[last][1] == "" {
+		log.Fatal("Please command for 'stop'!." + records[last][2] + "doesn't finish work.")
+	}
+
 	fmt.Print(explain)
 	fmt.Scanf("%s", &work)
 	t := time.Now()
 	fmt.Printf("Start working on '%s' at %s. Good luck!!", work, t.Format(datetimeFormat))
 	fmt.Println()
-	output(work, t)
+	log := []string{t.Format(datetimeFormat), "", work}
+	save(append(records, log))
 }
 
 func stop() {
@@ -50,11 +61,24 @@ Please select future plans!!
 2: Continue to work on other tasks
 3: Finish today's work
 selectd : `
+
+	records, err := read()
+	if err != nil {
+		log.Fatal("Please command for 'start'!")
+	}
+
 	fmt.Print(explain)
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
 	fmt.Println()
-	output("", time.Now())
+
+	last := len(records) - 1
+	if last >= 0 && records[last][1] == "" {
+		t := time.Now()
+		records[last][1] = t.Format(datetimeFormat)
+		save(records)
+	}
+
 	if next == 2 {
 		start()
 	} else if next == 3 {
@@ -64,21 +88,6 @@ selectd : `
 
 func report() {
 	fmt.Println("report")
-}
-
-func output(work string, t time.Time) {
-	records, err := read()
-	if err != nil {
-		records = [][]string{}
-	}
-	last := len(records) - 1
-	if last >= 0 && records[last][1] == "" {
-		records[last][1] = t.Format(datetimeFormat)
-	} else {
-		log := []string{t.Format(datetimeFormat), "", work}
-		records = append(records, log)
-	}
-	save(records)
 }
 
 func save(records [][]string) {
