@@ -82,12 +82,7 @@ func output(work string, t time.Time) {
 }
 
 func save(records [][]string) {
-	file, err := os.Open(logFileName)
-	fmt.Println("ファイルオープン")
-	if err != nil {
-		file, err = os.Create(logFileName)
-		fmt.Println("ファイル作成")
-	}
+	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE, 0664)
 	if err != nil {
 		fmt.Println("ファイル作成エラー")
 	}
