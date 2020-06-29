@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"flag"
 	"fmt"
 	"log"
@@ -37,7 +38,7 @@ What do you do? : `
 	t := time.Now()
 	fmt.Printf("Start working on '%s' at %s. Good luck!!", work, t.Format(datetimeFormat))
 	fmt.Println()
-	output("start", work, t)
+	output(work, t)
 }
 
 func stop() {
@@ -53,7 +54,7 @@ selectd : `
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
 	fmt.Println()
-	output("stop", "", time.Now())
+	output("", time.Now())
 	if next == 2 {
 		start()
 	} else if next == 3 {
@@ -65,12 +66,49 @@ func report() {
 	fmt.Println("report")
 }
 
-func output(prefix string, work string, t time.Time) {
-	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+func output(work string, t time.Time) {
+	records, err := read()
+	if err != nil {
+		records = [][]string{}
+	}
+	last := len(records) - 1
+	if last >= 0 && records[last][1] == "" {
+		records[last][1] = t.Format(datetimeFormat)
+	} else {
+		log := []string{t.Format(datetimeFormat), "", work}
+		records = append(records, log)
+	}
+	save(records)
+}
+
+func save(records [][]string) {
+	file, err := os.Open(logFileName)
+	fmt.Println("ファイルオープン")
+	if err != nil {
+		file, err = os.Create(logFileName)
+		fmt.Println("ファイル作成")
+	}
+	if err != nil {
+		fmt.Println("ファイル作成エラー")
+	}
+	defer file.Close()
+
+	log.Printf("%#v", records)
+	writer := csv.NewWriter(file)
+	err = writer.WriteAll(records)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	writer.Flush()
+}
 
-	fmt.Fprintf(f, "%s :: %s :: %s", t.Format(datetimeFormat), prefix, work)
+func read() ([][]string, error) {
+	file, err := os.Open(logFileName)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	return reader.ReadAll()
 }
