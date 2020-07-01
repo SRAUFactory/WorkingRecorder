@@ -88,6 +88,35 @@ selectd : `
 
 func report() {
 	fmt.Println("report")
+	record, _ := read()
+	reports := map[string]time.Duration{}
+	var total time.Duration
+	for i := range record {
+		startTime, _ := time.Parse(datetimeFormat, record[i][0])
+		stopTime, _ := time.Parse(datetimeFormat, record[i][1])
+		duration := stopTime.Sub(startTime)
+		work := record[i][2]
+		_, ok := reports[work]
+		if !ok {
+			reports[work] = duration
+		} else {
+			reports[work] += duration
+		}
+		total += duration
+	}
+	fmt.Print("Total work time is ")
+	fmt.Println(total)
+	for work, duration := range reports {
+		fmt.Print(work)
+		fmt.Print(" :: ")
+		fmt.Println(duration)
+	}
+
+	/*t := time.Now()
+	err = os.Rename(logFileName, logFileName+t.Format("20060102"))
+	if err != nil {
+		log.Fatal(err)
+	}*/
 }
 
 func save(records [][]string) {
