@@ -21,7 +21,8 @@ func main() {
 	case "stop":
 		stop()
 	case "report":
-		report()
+		records, _ := read()
+		report(records)
 	default:
 		fmt.Println("No such command!!")
 	}
@@ -82,20 +83,24 @@ selectd : `
 	if next == 2 {
 		start()
 	} else if next == 3 {
-		report()
+		t := time.Now()
+		err = os.Rename(logFileName, logFileName+t.Format("20060102"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		report(records)
 	}
 }
 
-func report() {
+func report(records [][]string) {
 	fmt.Println("report")
-	record, _ := read()
 	reports := map[string]time.Duration{}
 	var total time.Duration
-	for i := range record {
-		startTime, _ := time.Parse(datetimeFormat, record[i][0])
-		stopTime, _ := time.Parse(datetimeFormat, record[i][1])
+	for i := range records {
+		startTime, _ := time.Parse(datetimeFormat, records[i][0])
+		stopTime, _ := time.Parse(datetimeFormat, records[i][1])
 		duration := stopTime.Sub(startTime)
-		work := record[i][2]
+		work := records[i][2]
 		_, ok := reports[work]
 		if !ok {
 			reports[work] = duration
@@ -111,12 +116,6 @@ func report() {
 		fmt.Print(" :: ")
 		fmt.Println(duration)
 	}
-
-	/*t := time.Now()
-	err = os.Rename(logFileName, logFileName+t.Format("20060102"))
-	if err != nil {
-		log.Fatal(err)
-	}*/
 }
 
 func save(records [][]string) {
