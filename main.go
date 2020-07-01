@@ -121,7 +121,7 @@ func report(records [][]string) {
 func save(records [][]string) {
 	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE, 0664)
 	if err != nil {
-		fmt.Println("ファイル作成エラー")
+		fmt.Println("Open file error")
 	}
 	defer file.Close()
 
