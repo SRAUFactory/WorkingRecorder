@@ -97,6 +97,9 @@ func report(records [][]string) {
 	reports := map[string]time.Duration{}
 	var total time.Duration
 	for i := range records {
+		if records[i][1] == "" {
+			continue
+		}
 		startTime, _ := time.Parse(datetimeFormat, records[i][0])
 		stopTime, _ := time.Parse(datetimeFormat, records[i][1])
 		duration := stopTime.Sub(startTime)
