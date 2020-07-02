@@ -23,6 +23,9 @@ func main() {
 	case "report":
 		records, _ := read()
 		report(records)
+	case "now":
+		records, _ := read()
+		current(records)
 	default:
 		fmt.Println("No such command!!")
 	}
@@ -119,6 +122,21 @@ func report(records [][]string) {
 		fmt.Print(" :: ")
 		fmt.Println(duration)
 	}
+}
+
+func current(records [][]string) {
+	last := len(records) - 1
+	if last < 0 || records[last][1] != "" {
+		fmt.Println("Current work is nothing!!")
+		return
+	}
+	fmt.Print("Current work is ")
+	fmt.Println(records[last][2])
+	fmt.Print("From ")
+	fmt.Println(records[last][0])
+	startTime, _ := time.Parse(datetimeFormat, records[last][0])
+	fmt.Print("Working time is ")
+	fmt.Println(time.Now().Sub(startTime))
 }
 
 func save(records [][]string) {
