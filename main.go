@@ -128,7 +128,6 @@ func save(records [][]string) {
 	}
 	defer file.Close()
 
-	log.Printf("%#v", records)
 	writer := csv.NewWriter(file)
 	err = writer.WriteAll(records)
 	if err != nil {
