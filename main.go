@@ -136,7 +136,8 @@ func current(records [][]string) {
 	fmt.Println(records[last][0])
 	startTime, _ := time.Parse(datetimeFormat, records[last][0])
 	fmt.Print("Working time is ")
-	fmt.Println(time.Now().Sub(startTime))
+	nowTime, _ := time.Parse(datetimeFormat, time.Now().Format(datetimeFormat))
+	fmt.Println(nowTime.Sub(startTime))
 }
 
 func save(records [][]string) {
