@@ -105,9 +105,7 @@ func report(records [][]string) {
 		if records[i][1] == "" {
 			continue
 		}
-		startTime, _ := time.Parse(datetimeFormat, records[i][0])
-		stopTime, _ := time.Parse(datetimeFormat, records[i][1])
-		duration := stopTime.Sub(startTime)
+		duration := calc(records[i][0], records[i][1])
 		work := records[i][2]
 		_, ok := reports[work]
 		if !ok {
@@ -139,10 +137,8 @@ func current(records [][]string) {
 	fmt.Println(records[last][2])
 	fmt.Print("From ")
 	fmt.Println(records[last][0])
-	startTime, _ := time.Parse(datetimeFormat, records[last][0])
 	fmt.Print("Working time is ")
-	nowTime, _ := time.Parse(datetimeFormat, time.Now().Format(datetimeFormat))
-	fmt.Println(nowTime.Sub(startTime))
+	fmt.Println(calc(records[last][0], time.Now().Format(datetimeFormat)))
 }
 
 func save(records [][]string) {
@@ -169,4 +165,10 @@ func read() ([][]string, error) {
 
 	reader := csv.NewReader(file)
 	return reader.ReadAll()
+}
+
+func calc(start string, stop string) time.Duration {
+	startTime, _ := time.Parse(datetimeFormat, start)
+	stopTime, _ := time.Parse(datetimeFormat, stop)
+	return stopTime.Sub(startTime)
 }
