@@ -118,9 +118,8 @@ func report(records [][]string) {
 	fmt.Print("Total work time is ")
 	fmt.Println(total)
 	for j := 0; j < len(works); j++ {
-		fmt.Print(works[j])
-		fmt.Print(" :: ")
-		fmt.Println(reports[works[j]])
+		fmt.Printf("%s :: %s", works[j], reports[works[j]])
+		fmt.Println()
 	}
 }
 
@@ -130,12 +129,12 @@ func current(records [][]string) {
 		fmt.Println("Current work is nothing!!")
 		return
 	}
-	fmt.Print("Current work is ")
-	fmt.Println(records[last][2])
-	fmt.Print("From ")
-	fmt.Println(records[last][0])
-	fmt.Print("Working time is ")
-	fmt.Println(calc(records[last][0], time.Now().Format(datetimeFormat)))
+	fmt.Printf("Current work is %s", records[last][2])
+	fmt.Println()
+	fmt.Printf("From %s", records[last][0])
+	fmt.Println()
+	fmt.Printf("Working time is %s", calc(records[last][0], time.Now().Format(datetimeFormat)))
+	fmt.Println()
 }
 
 func save(records [][]string) {
