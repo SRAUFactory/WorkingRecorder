@@ -34,7 +34,6 @@ func main() {
 
 func start() {
 	var work string
-	fmt.Println("start")
 	const explain = `
 Start your task!!
 What do you do? : `
@@ -59,7 +58,6 @@ What do you do? : `
 
 func stop() {
 	var next int
-	fmt.Print("stop")
 	const explain = `
 Please select future plans!!
 1: Suspend work
@@ -97,7 +95,6 @@ selectd : `
 }
 
 func report(records [][]string) {
-	fmt.Println("report")
 	reports := map[string]time.Duration{}
 	var works []string
 	var total time.Duration
