@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"time"
 )
 
@@ -98,6 +99,7 @@ selectd : `
 func report(records [][]string) {
 	fmt.Println("report")
 	reports := map[string]time.Duration{}
+	var works []string
 	var total time.Duration
 	for i := range records {
 		if records[i][1] == "" {
@@ -109,18 +111,21 @@ func report(records [][]string) {
 		work := records[i][2]
 		_, ok := reports[work]
 		if !ok {
+			works = append(works, work)
 			reports[work] = duration
 		} else {
 			reports[work] += duration
 		}
 		total += duration
 	}
+	sort.Strings(works)
+
 	fmt.Print("Total work time is ")
 	fmt.Println(total)
-	for work, duration := range reports {
-		fmt.Print(work)
+	for j := 0; j < len(works); j++ {
+		fmt.Print(works[j])
 		fmt.Print(" :: ")
-		fmt.Println(duration)
+		fmt.Println(reports[works[j]])
 	}
 }
 
