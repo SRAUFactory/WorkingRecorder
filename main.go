@@ -44,8 +44,10 @@ What do you do? : `
 	}
 	last := len(records) - 1
 	if last >= 0 && records[last][1] == "" {
-		log.Fatal("Please command for 'stop'!." + records[last][2] + "doesn't finish work.")
+		current(records)
+		return
 	}
+	report(records)
 
 	fmt.Print(explain)
 	fmt.Scanf("%s", &work)
@@ -126,8 +128,7 @@ func report(records [][]string) {
 func current(records [][]string) {
 	last := len(records) - 1
 	if last < 0 || records[last][1] != "" {
-		fmt.Println("Current work is nothing!!")
-		return
+		log.Fatal("Current work is nothing!!")
 	}
 	fmt.Printf("Current work is %s", records[last][2])
 	fmt.Println()
