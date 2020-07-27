@@ -102,7 +102,7 @@ func report(records [][]string) {
 	var total time.Duration
 	for i := range records {
 		if records[i][1] == "" {
-			continue
+			records[i][1] = time.Now().Format(datetimeFormat)
 		}
 		duration := calc(records[i][0], records[i][1])
 		work := records[i][2]
