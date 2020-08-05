@@ -16,32 +16,33 @@ const datetimeFormat = "2006-01-02 15:04:05"
 func main() {
 	flag.Parse()
 	args := flag.Args()
+	records, err := read()
 	switch args[0] {
 	case "start":
-		start()
+		if err != nil {
+			records = [][]string{}
+		}
+		start(records)
 	case "stop":
-		stop()
+		if err != nil {
+			log.Fatal("Please command for 'start'!")
+		}
+		stop(records)
 	case "report":
-		records, _ := read()
 		report(records)
 	case "now":
-		records, _ := read()
 		current(records)
 	default:
 		fmt.Println("No such command!!")
 	}
 }
 
-func start() {
+func start(records [][]string) {
 	var work string
 	const explain = `
 Start your task!!
 What do you do? : `
 
-	records, err := read()
-	if err != nil {
-		records = [][]string{}
-	}
 	last := len(records) - 1
 	if last >= 0 && records[last][1] == "" {
 		current(records)
@@ -58,20 +59,14 @@ What do you do? : `
 	save(append(records, log))
 }
 
-func stop() {
+func stop(records [][]string) {
 	var next int
 	const explain = `
 Please select future plans!!
 1: Suspend work
 2: Continue to work on other tasks
 3: Finish today's work
-selectd : `
-
-	records, err := read()
-	if err != nil {
-		log.Fatal("Please command for 'start'!")
-	}
-
+select : `
 	fmt.Print(explain)
 	fmt.Scanf("%d", &next)
 	fmt.Printf("selected: %d", next)
@@ -85,10 +80,10 @@ selectd : `
 	}
 
 	if next == 2 {
-		start()
+		start(records)
 	} else if next == 3 {
 		t := time.Now()
-		err = os.Rename(logFileName, logFileName+t.Format("20060102"))
+		err := os.Rename(logFileName, logFileName+t.Format("20060102"))
 		if err != nil {
 			log.Fatal(err)
 		}
