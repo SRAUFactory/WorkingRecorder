@@ -1,6 +1,11 @@
 # WorkingRecorder
 WorkingRecorder is a simple task management and record working time.
 
+## Build
+```
+go build -o WorkingRecorder .
+```
+
 ## Usage
 The tool is run with a command-line argument to specify the action:
 
