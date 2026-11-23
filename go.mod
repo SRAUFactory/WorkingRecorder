@@ -1,3 +1,3 @@
 module github.com/SRAUFactory/WorkingRecorder
 
-go 1.26.3
+go 1.27.4
